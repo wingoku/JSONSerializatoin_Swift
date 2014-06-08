@@ -47,10 +47,7 @@ class DownloadData: NSObject, NSURLConnectionDelegate, NSURLConnectionDataDelega
     
     func startDownload()
     {
-        var link : String = "http://www.wingoku.bugs3.com/nearestHosps.php?lat=71&long=31&userSelection=dental";
-        
-        //var link : String = "https://itunes.apple.com/search?term=JQ Software&media=software";
-        
+        var link : String = ""
         var encodedLink : String = link.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding);
         
         var nsUrl : NSURL = NSURL(string: encodedLink);

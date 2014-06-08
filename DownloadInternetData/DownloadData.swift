@@ -11,7 +11,7 @@ import UIKit
 
 protocol DownloadDataInterface
 {
-    func sendData(NSDictionary);
+    func sendData(NSArray);
 }
 
 class DownloadData: NSObject, NSURLConnectionDelegate, NSURLConnectionDataDelegate {
@@ -49,6 +49,8 @@ class DownloadData: NSObject, NSURLConnectionDelegate, NSURLConnectionDataDelega
     {
         var link : String = "http://www.wingoku.bugs3.com/nearestHosps.php?lat=71&long=31&userSelection=dental";
         
+        //var link : String = "https://itunes.apple.com/search?term=JQ Software&media=software";
+        
         var encodedLink : String = link.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding);
         
         var nsUrl : NSURL = NSURL(string: encodedLink);
@@ -67,7 +69,7 @@ class DownloadData: NSObject, NSURLConnectionDelegate, NSURLConnectionDataDelega
     // nSURLConnectionDelegate method
     func connection(connection: NSURLConnection!, didFailWithError error: NSError!)
     {
-        println("Error in Connection\n");
+        println("Error in Connection\n\(error.description)\n");
     }
     
     
@@ -77,9 +79,9 @@ class DownloadData: NSObject, NSURLConnectionDelegate, NSURLConnectionDataDelega
         println("Response recieved\n");
         
         nsMutData = NSData();
-        
     }
 
+    
      // NSURLConnectionDataDelegate method
     func connection(connection: NSURLConnection!, didReceiveData data: NSData!)
     {
@@ -90,7 +92,7 @@ class DownloadData: NSObject, NSURLConnectionDelegate, NSURLConnectionDataDelega
             nsMutData = data as NSMutableData;
         }
         
-
+       
         
     }
     
@@ -105,6 +107,29 @@ class DownloadData: NSObject, NSURLConnectionDelegate, NSURLConnectionDataDelega
     
     func completed()
     {
+     
+        println("decoding -> String\n");
+        var temp : NSString = NSString(data: nsMutData, encoding: NSUTF8StringEncoding);
+        println(temp);
+        
+     
+        println("finding pos\n");
+        
+        var endPos = temp.rangeOfString("<!--");
+        
+        
+        println("substring\n");
+        var errorFreeString : NSString = temp.substringToIndex(endPos.location);
+        
+        println("\n\n\n\n\n\n\n\n\(errorFreeString)")
+        
+        
+        println("string -> mut\n");
+        nsMutData = errorFreeString.dataUsingEncoding(NSUTF8StringEncoding);
+        
+        
+        println("done!\n");
+
         if !self.ddDelegate
         {
             println("Delegate is null\n");
@@ -118,7 +143,7 @@ class DownloadData: NSObject, NSURLConnectionDelegate, NSURLConnectionDataDelega
             
             
             // causing EXC_BAD_INSTRUCTION cod= EXC_1386_INVOP
-            let sJson : NSDictionary = NSJSONSerialization.JSONObjectWithData(nsMutData, options: NSJSONReadingOptions.MutableContainers, error: &err) as NSDictionary
+            let sJson : NSArray = NSJSONSerialization.JSONObjectWithData(nsMutData, options: NSJSONReadingOptions.MutableContainers, error: &err) as NSArray
             
            // var dict: NSDictionary = NSDictionary();
             

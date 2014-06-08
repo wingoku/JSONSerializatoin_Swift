@@ -27,7 +27,7 @@ class ViewController: UIViewController, DownloadDataInterface {
     }
 
     
-    func sendData(serializedJson: NSDictionary)
+    func sendData(serializedJson: NSArray)
     {
         println("Interface function VIEW_CONTROLLER\n");
     }
